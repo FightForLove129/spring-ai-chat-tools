@@ -2,10 +2,13 @@ package com.pain.ai.chat.tools.controller;
 
 import com.pain.ai.chat.tools.constant.Constants;
 import com.pain.ai.chat.tools.request.AiMessageRequest;
+import com.pain.ai.chat.tools.response.AiMessageResponse;
 import com.pain.ai.chat.tools.service.AiChatToolsService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
@@ -34,5 +37,17 @@ public class AiChatToolsController {
                 .doOnComplete(() -> log.info("实时流式聊天响应完成"))
                 .doOnError(error -> log.error("实时流式聊天响应报错：", error))
                 .onErrorReturn("[ERROR] 实时流式聊天响应报错");
+    }
+
+    @PostMapping("/marketing/chat")
+    public ResponseEntity<AiMessageResponse> marketingChat(@Valid @RequestBody AiMessageRequest request) {
+        log.info("收到生成营销文案的请求：{}", request.getContent());
+        try {
+            AiMessageResponse response = aiChatToolsService.marketingAiChat(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.info("生成营销文案报错：", e);
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成营销文案失败：" + e.getMessage()));
+        }
     }
 }

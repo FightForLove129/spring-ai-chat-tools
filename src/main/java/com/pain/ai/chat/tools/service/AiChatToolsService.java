@@ -1,6 +1,7 @@
 package com.pain.ai.chat.tools.service;
 
 import com.pain.ai.chat.tools.request.AiMessageRequest;
+import com.pain.ai.chat.tools.response.AiMessageResponse;
 import reactor.core.publisher.Flux;
 
 public interface AiChatToolsService {
@@ -9,4 +10,9 @@ public interface AiChatToolsService {
      * 实时流式聊天
      */
     Flux<String> streamAiChat(AiMessageRequest request);
+
+    /**
+     * 营销文案生成
+     */
+    AiMessageResponse marketingAiChat(AiMessageRequest request);
 }
