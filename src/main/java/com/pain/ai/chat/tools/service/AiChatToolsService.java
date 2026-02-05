@@ -25,4 +25,11 @@ public interface AiChatToolsService {
      * 智能问答
      */
     AiMessageResponse qaAiChat(AiMessageRequest request);
+
+    /**
+     * 通用对话聊天
+     */
+    AiMessageResponse commonAiChat(AiMessageRequest request);
+
+
 }

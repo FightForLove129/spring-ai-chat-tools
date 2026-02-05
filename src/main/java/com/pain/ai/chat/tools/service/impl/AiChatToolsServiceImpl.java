@@ -12,6 +12,7 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.deepseek.DeepSeekChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;
@@ -137,5 +138,36 @@ public class AiChatToolsServiceImpl implements AiChatToolsService {
         }
     }
 
+    @Override
+    public AiMessageResponse commonAiChat(AiMessageRequest request) {
+        try{
+            long startTime = System.currentTimeMillis();
+            String promptStr = StringUtils.hasLength(request.getSystemPrompt()) ? request.getSystemPrompt() : Constants.PROMPT_COMMON_CHAT;
+
+            // 设置提示词
+            PromptTemplate promptTemplate = new PromptTemplate(promptStr.concat("\n\n用户: ").concat(Constants.CONTENT_PARAMS));
+            Prompt prompt = promptTemplate.create(Map.of(Constants.CONTENT_KEY, request.getContent()));
+
+            // 设置聊天参数
+            DeepSeekChatOptions options = DeepSeekChatOptions.builder()
+                    .temperature(request.getTemperature() == null ? Constants.DEFAULT_TEMPERATURE : request.getTemperature())
+                    .maxTokens(request.getMaxTokens() == null ? Constants.DEFAULT_MAX_TOKENS : request.getMaxTokens())
+                    .build();
+
+            // 调用大模型
+            ChatResponse chatResponse = chatModel.call(new Prompt(prompt.getInstructions(), options));
+            String content = chatResponse.getResult().getOutput().getText();
+
+            long executeTime = System.currentTimeMillis() - startTime;
+            log.info("聊天耗时: {}ms",  executeTime);
+
+            AiMessageResponse aiMessageResponse = AiMessageResponse.success(content, Constants.MODEL_DEEPSEEK_CHAT);
+            aiMessageResponse.setExecuteTimeMs(executeTime);
+            return aiMessageResponse;
+        }catch (Exception e){
+            log.error("与AI大模型对话失败: ", e);
+            return AiMessageResponse.error("与AI大模型对话失败: " + e.getMessage());
+        }
+    }
 
 }

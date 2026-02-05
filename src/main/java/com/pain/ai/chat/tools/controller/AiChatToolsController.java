@@ -74,4 +74,16 @@ public class AiChatToolsController {
             return ResponseEntity.internalServerError().body(AiMessageResponse.error("执行智能问答逻辑失败，异常信息为：" + e.getMessage()));
         }
     }
+
+    @PostMapping("/common/chat")
+    public ResponseEntity<AiMessageResponse> commonChat(@Valid @RequestBody AiMessageRequest request) {
+        log.info("收到通用聊天的请求：{}", request.getContent());
+        try {
+            AiMessageResponse response = aiChatToolsService.qaAiChat(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.info("执行通用聊天逻辑失败：", e);
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("执行通用聊天逻辑失败，异常信息为：" + e.getMessage()));
+        }
+    }
 }
