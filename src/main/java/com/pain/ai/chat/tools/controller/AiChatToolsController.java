@@ -47,7 +47,7 @@ public class AiChatToolsController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.info("生成营销文案报错：", e);
-            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成营销文案失败：" + e.getMessage()));
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成营销文案失败，异常信息为：" + e.getMessage()));
         }
     }
 
@@ -55,11 +55,23 @@ public class AiChatToolsController {
     public ResponseEntity<AiMessageResponse> codingChat(@Valid @RequestBody AiMessageRequest request) {
         log.info("收到生成智能代码的请求：{}", request.getContent());
         try {
-            AiMessageResponse response = aiChatToolsService.marketingAiChat(request);
+            AiMessageResponse response = aiChatToolsService.codingAiChat(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.info("生成代码失败：", e);
-            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成代码失败：" + e.getMessage()));
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成代码失败，异常信息为：" + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/qa/chat")
+    public ResponseEntity<AiMessageResponse> qaChat(@Valid @RequestBody AiMessageRequest request) {
+        log.info("收到智能问答的请求：{}", request.getContent());
+        try {
+            AiMessageResponse response = aiChatToolsService.qaAiChat(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.info("执行智能问答逻辑失败：", e);
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("执行智能问答逻辑失败，异常信息为：" + e.getMessage()));
         }
     }
 }

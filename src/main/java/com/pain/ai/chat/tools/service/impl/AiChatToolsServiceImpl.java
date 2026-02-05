@@ -106,4 +106,36 @@ public class AiChatToolsServiceImpl implements AiChatToolsService {
         }
     }
 
+    @Override
+    public AiMessageResponse qaAiChat(AiMessageRequest request) {
+        try{
+            long startTime = System.currentTimeMillis();
+
+            // 设置智能问答提示词
+            PromptTemplate promptTemplate = new PromptTemplate(Constants.PROMPT_QA_CHAT.concat("\n\n用户问题: ").concat(Constants.CONTENT_PARAMS));
+            Prompt prompt = promptTemplate.create(Map.of(Constants.CONTENT_KEY, request.getContent()));
+
+            // 设置智能问答参数
+            DeepSeekChatOptions options = DeepSeekChatOptions.builder()
+                    .temperature(request.getTemperature() == null ? Constants.DEFAULT_QA_TEMPERATURE : request.getTemperature())
+                    .maxTokens(request.getMaxTokens() == null ? Constants.DEFAULT_QA_MAX_TOKENS : request.getMaxTokens())
+                    .build();
+
+            // 调用AI大模型
+            ChatResponse chatResponse = chatModel.call(new Prompt(prompt.getInstructions(), options));
+            String content = chatResponse.getResult().getOutput().getText();
+
+            long executeTime = System.currentTimeMillis() - startTime;
+            log.info("执行智能问答逻辑耗时: {}ms",  executeTime);
+
+            AiMessageResponse aiMessageResponse = AiMessageResponse.success(content, Constants.MODEL_DEEPSEEK_CHAT);
+            aiMessageResponse.setExecuteTimeMs(executeTime);
+            return aiMessageResponse;
+        }catch (Exception e){
+            log.error("处理智能问答逻辑失败: ", e);
+            return AiMessageResponse.error("处理处理智能问答逻辑失败: " + e.getMessage());
+        }
+    }
+
+
 }

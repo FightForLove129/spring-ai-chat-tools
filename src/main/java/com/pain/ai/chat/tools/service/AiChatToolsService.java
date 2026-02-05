@@ -20,4 +20,9 @@ public interface AiChatToolsService {
      * 智能代码生成
      */
     AiMessageResponse codingAiChat(AiMessageRequest request);
+
+    /**
+     * 智能问答
+     */
+    AiMessageResponse qaAiChat(AiMessageRequest request);
 }
