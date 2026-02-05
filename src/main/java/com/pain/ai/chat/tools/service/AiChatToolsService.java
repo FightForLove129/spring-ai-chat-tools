@@ -15,4 +15,9 @@ public interface AiChatToolsService {
      * 营销文案生成
      */
     AiMessageResponse marketingAiChat(AiMessageRequest request);
+
+    /**
+     * 智能代码生成
+     */
+    AiMessageResponse codingAiChat(AiMessageRequest request);
 }

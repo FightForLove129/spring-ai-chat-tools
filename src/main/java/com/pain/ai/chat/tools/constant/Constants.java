@@ -34,6 +34,22 @@ public class Constants {
     public static final double DEFAULT_TEMPERATURE = 0.9;
 
     /**
+     * 默认营销文案温度参数
+     */
+    public static final double DEFAULT_MARKETING_TEMPERATURE = 1.2;
+
+    /**
+     * 默认生成代码的温度参数
+     */
+    public static final double DEFAULT_CODING_TEMPERATURE = 0.1;
+
+    /**
+     * 默认生成代码的最大Token数量
+     */
+    public static final int DEFAULT_CODING_MAX_TOKENS = 1600;
+
+
+    /**
      * 对接的大模型
      */
     public static final String MODEL_DEEPSEEK_CHAT = "deepseek-chat";
@@ -62,6 +78,21 @@ public class Constants {
                 5. 语言简洁有力，易于理解
                 
                 请用中文回复，格式清晰，内容富有创意。
+                """;
+    /**
+     * 智能代码生成提示词
+     */
+    public static final String PROMPT_CODING_CHAT =  """
+                你是一位资深的软件工程师，精通多种编程语言和技术栈。
+                请根据用户的需求，生成高质量的代码，要求：
+                1. 代码结构清晰，逻辑合理
+                2. 包含必要的注释说明
+                3. 遵循最佳实践和编码规范
+                4. 考虑错误处理和边界情况
+                5. 考虑并发安全与多线程处理
+                6. 如果需要，提供使用示例
+                
+                请用中文注释，代码要完整可运行。
                 """;
 
 }

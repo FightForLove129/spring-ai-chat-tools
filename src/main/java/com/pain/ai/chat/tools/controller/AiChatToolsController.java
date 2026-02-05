@@ -50,4 +50,16 @@ public class AiChatToolsController {
             return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成营销文案失败：" + e.getMessage()));
         }
     }
+
+    @PostMapping("/coding/chat")
+    public ResponseEntity<AiMessageResponse> codingChat(@Valid @RequestBody AiMessageRequest request) {
+        log.info("收到生成智能代码的请求：{}", request.getContent());
+        try {
+            AiMessageResponse response = aiChatToolsService.marketingAiChat(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.info("生成代码失败：", e);
+            return ResponseEntity.internalServerError().body(AiMessageResponse.error("生成代码失败：" + e.getMessage()));
+        }
+    }
 }
