@@ -24,10 +24,10 @@ public class AiChatToolsController {
      * 实时流式聊天
      */
     @GetMapping(value = "/stream/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> streamChat(@RequestBody AiMessageRequest request) {
-        log.info("收到流式聊天请求：{}", request.toString());
+    public Flux<String> streamChat(@RequestParam String content, @RequestParam Double temperature,  @RequestParam Integer maxTokens) {
+        log.info("收到流式聊天请求：{}", content);
 
-        return aiChatToolsService.streamAiChat(request)
+        return aiChatToolsService.streamAiChat(new AiMessageRequest(content, temperature, maxTokens))
                 .filter(data -> data != null && !data.trim().isEmpty())
                 .doOnNext(data -> log.debug("原始数据：'{}'", data))
                 .map(data -> data.trim())

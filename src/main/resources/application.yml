@@ -2,7 +2,7 @@ spring:
   ai:
     deepseek:
       # 在DeepSeek控制台申请的API密钥
-      api-key: ${DEEPSEEK_API_KEY:your_deepseek_api_key}
+      api-key: ${DEEPSEEK_API_KEY:sk-1ad4a903a9ad42be8478c484cc014f02}
 
       # API基础地址（私有化部署需修改）
       base-url: https://api.deepseek.com

@@ -44,4 +44,10 @@ public class AiMessageRequest {
         this.content = content;
         this.temperature = temperature;
     }
+
+    public AiMessageRequest(String content, Double temperature, Integer maxTokens) {
+        this.content = content;
+        this.temperature = temperature;
+        this.maxTokens = maxTokens;
+    }
 }
